@@ -1,0 +1,30 @@
+# The status generator command.
+# Optional: with no status generator the bar will display only tags and layout name.
+command = "i3status-rs"
+
+# Colors
+background = "#2f343fff"
+#color = "#ffffffff"
+#separator = "#454947ff"
+tag_focused_fg = "#fdf6e3ff"
+tag_focused_bg = "#353836ff"
+tag_urgent_fg = "#353836ff"
+tag_urgent_bg = "#fdf6e3ff"
+tag_inactive_fg = "#fdf6e3ff"
+tag_inactive_bg = "#2f343fff"
+
+# The font and various sizes
+font = "FiraCode Nerd Font Mono 10"
+height = 24
+separator_width = 2.0
+tags_padding = 5.0
+
+# Misc
+position = "top" # either "top" or "bottom"
+layer = "top" # one of "top", "overlay", "bottom" or "background"
+hide_inactive_tags = true
+invert_touchpad_scrolling = true
+show_tags = true
+show_layout_name = true
+blend = true # whether tags/blocks colors should blend with bar's background
+show_mode = true

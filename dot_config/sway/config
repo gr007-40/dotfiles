@@ -1,0 +1,454 @@
+set $mod Mod4
+set $alt Mod1
+floating_modifier $mod
+
+font pango:Hack 10
+
+set $terminal foot
+bindsym $mod+Return exec $terminal tmux;focus
+
+set $browser firefox
+bindsym $mod+b exec $browser;focus
+
+set $filemanager $terminal -a "flying-foot" yazi
+bindsym $mod+e exec $filemanager;focus
+
+output eDP-1 res 1920x1080
+bindsym $mod+m output HDMI-A-1 layout none mirror eDP-1
+
+#output "*" bg /home/groot/.config/sway/wallpaper.png fill
+#exec swaybg -o "*" -i /home/groot/.config/sway/wallpaper.png -m fill
+#exec feh --bg-fill ~/.config/sway/wallpaper.png
+
+#autostart
+exec autotiling-rs
+exec /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1
+exec keepassxc
+exec_always nm-applet --indicator
+#exec blueman-applet
+
+# clipboard manager
+exec clipse -listen
+bindsym $mod+v exec $terminal sh -c "swaymsg floating enable, move position center; swaymsg resize set 80ppt 80ppt && clipse"  
+
+
+# start bemenu with wofi
+bindsym $mod+d exec wofi
+
+# Screen brightness controls
+bindsym --locked XF86MonBrightnessUp exec brightnessctl set +5%
+bindsym --locked XF86MonBrightnessDown exec brightnessctl set 5%-
+
+# Use media keys to manage volume
+bindsym XF86AudioRaiseVolume exec wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%+
+bindsym XF86AudioLowerVolume exec wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-
+bindsym XF86AudioMute exec wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle
+bindsym XF86AudioMicMute exec wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle
+
+
+# media control
+bindsym XF86AudioNext exec playerctl next
+bindsym XF86AudioPrev exec playerctl previous
+bindsym XF86AudioPlay exec playerctl play-pause
+bindsym XF86AudioStop exec playerctl stop
+
+#####
+# Screenshot
+#####
+
+bindsym Print exec flameshot gui
+
+# kill focused window
+bindsym $mod+q kill
+
+# split in horizontal orientation
+bindsym $mod+$alt+h split h
+
+# split in vertical orientation
+bindsym $mod+$alt+v split v
+
+# enter fullscreen mode for the focused container
+bindsym $mod+f fullscreen toggle
+
+# change container layout split
+bindsym $mod+s layout toggle split
+
+# toggle tiling / floating
+bindsym $mod+space floating toggle
+
+# change focus between tiling / floating windows
+bindsym $mod+Shift+space focus mode_toggle
+
+# toggle sticky
+bindsym $mod+Shift+s sticky toggle
+
+# focus the parent container
+bindsym $mod+a focus parent
+
+# move the currently focused window to the scratchpad
+bindsym $mod+minus move scratchpad
+
+# Show the next scratchpad window or hide the focused scratchpad window.
+# If there are multiple scratchpad windows, this command cycles through them.
+bindsym $mod+Shift+minus scratchpad show
+
+# change focus
+bindsym $alt+h focus left
+bindsym $alt+j focus down
+bindsym $alt+k focus up
+bindsym $alt+l focus right
+
+# move focused window
+bindsym $alt+Shift+h move left
+bindsym $alt+Shift+j move down
+bindsym $alt+Shift+k move up
+bindsym $alt+Shift+l move right
+
+# move focused container to back_and_forth and switch workspace
+bindsym $alt+Shift+Tab move container to workspace back_and_forth
+
+#navigate workspaces next / previous
+bindsym $mod+k workspace next
+bindsym $mod+j workspace prev
+bindsym $mod+Right workspace next
+bindsym $mod+Left workspace prev
+bindsym $mod+Tab workspace back_and_forth
+
+# switch to specific workspace
+bindsym $mod+1 workspace 1
+bindsym $mod+2 workspace 2
+bindsym $mod+3 workspace 3
+bindsym $mod+4 workspace 4
+bindsym $mod+5 workspace 5
+bindsym $mod+6 workspace 6
+bindsym $mod+7 workspace 7
+bindsym $mod+8 workspace 8
+bindsym $mod+9 workspace 9
+bindsym $mod+0 workspace 10
+
+# move focused container to workspace
+bindsym $mod+Shift+1 move container to workspace 1
+bindsym $mod+Shift+2 move container to workspace 2
+bindsym $mod+Shift+3 move container to workspace 3
+bindsym $mod+Shift+4 move container to workspace 4
+bindsym $mod+Shift+5 move container to workspace 5
+bindsym $mod+Shift+6 move container to workspace 6
+bindsym $mod+Shift+7 move container to workspace 7
+bindsym $mod+Shift+8 move container to workspace 8
+bindsym $mod+Shift+9 move container to workspace 9
+bindsym $mod+Shift+0 move container to workspace 10
+
+# Move to workspace with focused container
+bindsym $alt+Shift+1 move container to workspace 1; workspace 1
+bindsym $alt+Shift+2 move container to workspace 2; workspace 2
+bindsym $alt+Shift+3 move container to workspace 3; workspace 3
+bindsym $alt+Shift+4 move container to workspace 4; workspace 4
+bindsym $alt+Shift+5 move container to workspace 5; workspace 5
+bindsym $alt+Shift+6 move container to workspace 6; workspace 6
+bindsym $alt+Shift+7 move container to workspace 7; workspace 7
+bindsym $alt+Shift+8 move container to workspace 8; workspace 8
+bindsym $alt+Shift+9 move container to workspace 9; workspace 9
+bindsym $alt+Shift+0 move container to workspace 10; workspace 10
+
+# move focused container to next, prev and back_and_forth
+bindsym $mod+Shift+k move container to workspace next
+bindsym $mod+Shift+j move container to workspace prev
+bindsym $mod+Shift+Right move container to workspace next
+bindsym $mod+Shift+Left move container to workspace prev
+bindsym $mod+Shift+Tab move container to workspace back_and_forth; workspace back_and_forth
+
+# reload the configuration file
+bindsym $mod+Shift+c reload
+
+# restart sway inplace (preserves your layout/session, can be used to upgrade sway)
+bindsym $mod+Shift+r restart
+
+# floating btm
+bindsym control+shift+escape exec $terminal -a 'flying-foot' btm
+for_window [app_id="flying-foot"] floating enable
+
+# resize window (you can also use the mouse for that)
+mode "resize" {
+        bindsym Left resize shrink width 5 px or 5 ppt
+        bindsym Down resize grow height 5 px or 5 ppt
+        bindsym Up resize shrink height 5 px or 5 ppt
+        bindsym Right resize grow width 5 px or 5 ppt
+        bindsym h resize shrink width 5 px or 5 ppt
+        bindsym j resize grow height 5 px or 5 ppt
+        bindsym k resize shrink height 5 px or 5 ppt
+        bindsym l resize grow width 5 px or 5 ppt
+        bindsym Return mode "default"
+        bindsym Escape mode "default"
+}
+bindsym $mod+r mode "resize"
+
+# hide borders
+hide_edge_borders smart
+default_border pixel 1
+
+# align window titles
+title_align center
+
+# Smart popup
+popup_during_fullscreen smart
+
+# Auto focus following mouse
+focus_follows_mouse yes
+
+# Auto workspace back and forth
+workspace_auto_back_and_forth yes
+
+# Inhibit Idle if a window is fullscreen
+for_window [class="^.*"] inhibit_idle fullscreen
+for_window [app_id="^.*"] inhibit_idle fullscreen
+
+# hide mouse after 5 seconds inactivity
+seat * hide_cursor 5000
+
+# Disable the laptop screen when the lid is closed.
+bindswitch --reload --locked lid:on output eDP-1 disable
+bindswitch --reload --locked lid:off output eDP-1 enable
+
+# Display window as floating. Find out wayland app_id with "swaymsg -t get_tree | jq '.' | grep app_id" and xorg class with xprop
+for_window [window_role = "pop-up"] floating enable
+for_window [window_role = "bubble"] floating enable
+for_window [window_role = "dialog"] floating enable
+for_window [window_type = "dialog"] floating enable
+for_window [window_role = "task_dialog"] floating enable
+for_window [window_type = "menu"] floating enable
+for_window [app_id = "floating"] floating enable
+for_window [app_id = "floating_update"] floating enable, resize set width 1000px height 600px
+for_window [class = "(?i)pinentry"] floating enable
+for_window [app_id = "Yad"] floating enable
+for_window [app_id = "yad"] floating enable
+for_window [title = ".*kdbx - KeePass"] floating enable, resize set 1276px 814px
+for_window [class = "KeePass2"] floating enable
+for_window [class = "KeyStore Explorer"] floating enable
+for_window [app_id = "virt-manager"] floating enable
+for_window [app_id = "xfce-polkit"] floating enable
+for_window [instance = "origin.exe"] floating enable
+for_window [title = "About Mozilla Firefox"] floating enable
+for_window [window_role = "About"] floating enable
+# Kill Firefox sharing indicator. It opens as an own container. Does not kill functionality
+for_window [title = "Firefox - Sharing Indicator"] kill
+for_window [title = "Firefox — Sharing Indicator"] kill
+for_window [app_id = "firefox" title="Library"] floating enable, sticky enable
+for_window [app_id = "pavucontrol"] floating enable
+for_window [app_id = "blueberry.py"] floating enable
+for_window [title = "Thunderbird Preferences"] floating enable
+for_window [title = "Manage KeeAgent.*"] floating enable
+for_window [title = "Page Info - .*"] floating enable
+for_window [class = "ConkyKeyboard"] floating enable
+for_window [class = "Gufw.py"] floating enable
+# for_window [app_id = "keepassxc"] floating enable, resize set 1276px 814px
+for_window [title = "^Open File$"] floating enable
+for_window [class = "^zoom$"] floating enable
+for_window [app_id = "avizo-service"] border none, sticky toggle
+no_focus [app_id="avizo-service"]
+for_window [window_role = "GtkFileChooserDialog"] resize set 590 340
+for_window [window_role = "GtkFiileChooserDialog"] move position center
+for_window [app_id = "tlp-ui"] floating enable
+for_window [title = "mpvfloat"] floating enable
+for_window [title = ".*Kee - Mozilla Firefox"] floating enable
+for_window [app_id = "nm-openconnect-auth-dialog"] floating enable
+for_window [class = "davmail-DavGateway"] floating enable
+for_window [title = "Open Database File"] floating enable
+for_window [app_id = "evolution-alarm-notify"] floating enable
+for_window [app_id = "org.gnome.Calculator"] floating enable
+for_window [title = "TeamSpeak 3"] floating enable
+for_window [app_id="(?i)Thunderbird" title=".*Reminder"] floating enable
+for_window [class = "ATLauncher"] floating enable
+for_window [app_id="pamac-manager"] floating enable
+for_window [title="File Operation Progress"] floating enable, sticky enable, resize set width 40 ppt height 30 ppt
+for_window [title="nmtui"] floating enable
+for_window [title="Save File"] floating enable
+for_window [app_id="wdisplays"] floating enable
+for_window [app_id="floating_shell_portrait"] floating enable, sticky enable, resize set width 30 ppt height 40 ppt
+for_window [app_id="floating_shell"] floating enable, sticky enable
+for_window [app_id = "qt5ct"] floating enable
+for_window [app_id = "gnome-tweaks"] floating enable
+for_window [class = "Bluetooth-sendto" instance = "bluetooth-sendto"] floating enable
+for_window [window_role = "Preferences"] floating enable
+for_window [title = "Picture in picture"] floating enable, sticky enable
+for_window [app_id = "flameshot"] floating enable
+for_window [title = "Firefox - Choose User Profile" ] floating enable
+for_window [class = "yad"] floating enable
+for_window [app_id = "wdisplays"] resize set width 1150px height 480px
+for_window [app_id = "nwg-look"] floating enable, resize set width 580px height 480px
+for_window [app_id="^launcher$"] floating enable, sticky enable, resize set 30 ppt 60 ppt
+for_window [app_id="(?i)(?:blueman-manager|azote|gnome-disks|nwg-shell-config)"] floating enable
+for_window [app_id="(?i)(?:pavucontrol|nm-connection-editor|gsimplecal|galculator)"] floating enable
+for_window [class="(?i)(?:lxappearance)"] floating enable
+for_window [app_id="(?i)(?:firefox|chromium)"] border none
+for_window [title="(?i)(?:copying|deleting|moving)"] floating enable
+for_window [app_id = "com.lakoliu.Furtherance"] floating enable
+
+# Zoom
+for_window [app_id="zoom"] floating enable
+for_window [app_id="zoom" title="Choose ONE of the audio conference options"] floating enable
+for_window [app_id="zoom" title="zoom"] floating enable
+for_window [app_id="zoom" title="Zoom Meeting"] floating disable
+for_window [app_id="zoom" title="Zoom - Free Account"] floating disable
+
+# https://github.com/ValveSoftware/steam-for-linux/issues/1040
+for_window [class="^Steam$" title="^Friends$"] floating enable
+for_window [class="^Steam$" title="Steam - News"] floating enable
+for_window [class="^Steam$" title=".* - Chat"] floating enable
+for_window [class="^Steam$" title="^Settings$"] floating enable
+for_window [class="^Steam$" title=".* - event started"] floating enable
+for_window [class="^Steam$" title=".* CD key"] floating enable
+for_window [class="^Steam$" title="^Steam - Self Updater$"] floating enable
+for_window [class="^Steam$" title="^Screenshot Uploader$"] floating enable
+for_window [class="^Steam$" title="^Steam Guard - Computer Authorization Required$"] floating enable
+for_window [title="^Steam Keyboard$"] floating enable
+
+# Scratchpad terminal
+for_window [title="(?i)$criteria"] floating enable, move absolute position 1500px 300px, resize set 1200px 700px, move to scratchpad, mark $criteria
+
+# Start i3bar to display a workspace bar (plus the system information i3status
+# finds out, if available)
+bar {
+    #tray_output none
+    position top
+    font pango:Font Awesome 5 Free 10, FiraCode Nerd Font 10
+    binding_mode_indicator yes
+    status_command i3status-rs
+        colors {
+        background #2F343F
+        statusline #F9FAF9
+        separator  #454947
+#                      	   border  backgr. text
+        focused_workspace  #F9FAF9 #232729 #FDF6E3
+        active_workspace   #595B5B #353836 #FDF6E3
+        inactive_workspace #595B5B #2F343F #49505F
+        binding_mode       #232729 #2C2C2C #F9FAF9
+        urgent_workspace   #232729 #FDF6E3 #E5201D
+    }
+}
+
+# Theme colors
+# class                   border  backgr. text    indic.   child_border
+  client.focused          #404552 #404552 #9BA2B3 #FDF6E3  #666A76
+  client.focused_inactive #2F343F #2F343F #595F6D #454948
+  client.unfocused        #2F343F #2F343F #595F6D #454948
+  client.urgent           #CB4B16 #FDF6E3 #1ABC9C #268BD2
+  client.placeholder      #000000 #0c0c0c #ffffff #000000
+  client.background       #2B2C2B
+
+
+#############################
+### settings for i3-gaps: ###
+#############################
+
+# Set inner/outer gaps
+gaps inner 0
+gaps outer -2
+
+# Additionally, you can issue commands with the following syntax. This is useful to bind keys to changing the gap size.
+# gaps inner|outer current|all set|plus|minus <px>
+# gaps inner all set 10
+# gaps outer all plus 5
+
+# Smart gaps (gaps used if only more than one container on the workspace)
+smart_gaps on
+
+# Smart borders (draw borders around container only if it is not the only container on this workspace)
+# on|no_gaps (on=always activate and no_gaps=only activate if the gap size to the edge of the screen is 0)
+smart_borders on
+
+# Press $mod+Shift+g to enter the gap mode. Choose o or i for modifying outer/inner gaps. Press one of + / - (in-/decrement for current workspace) or 0 (remove gaps for current workspace). If you also press Shift with these keys, the change will be global for all workspaces.
+set $mode_gaps Gaps: (o) outer, (i) inner
+set $mode_gaps_outer Outer Gaps: +|-|0 (local), Shift + +|-|0 (global)
+set $mode_gaps_inner Inner Gaps: +|-|0 (local), Shift + +|-|0 (global)
+
+mode "$mode_gaps" {
+        bindsym o      mode "$mode_gaps_outer"
+        bindsym i      mode "$mode_gaps_inner"
+        bindsym Return mode "default"
+        bindsym Escape mode "default"
+}
+bindsym $mod+Shift+g mode "$mode_gaps"
+
+mode "$mode_gaps_inner" {
+        bindsym plus  gaps inner current plus 5
+        bindsym minus gaps inner current minus 5
+        bindsym k  gaps inner current plus 5
+        bindsym j gaps inner current minus 5
+        bindsym 0     gaps inner current set 0
+
+        bindsym Shift+plus  gaps inner all plus 5
+        bindsym Shift+minus gaps inner all minus 5
+        bindsym Shift+k  gaps inner all plus 5
+        bindsym Shift+j gaps inner all minus 5
+        bindsym Shift+0     gaps inner all set 0
+
+        bindsym Return mode "default"
+        bindsym Escape mode "default"
+}
+mode "$mode_gaps_outer" {
+        bindsym plus  gaps outer current plus 5
+        bindsym minus gaps outer current minus 5
+        bindsym k  gaps outer current plus 5
+        bindsym j gaps outer current minus 5
+        bindsym 0     gaps outer current set 0
+
+        bindsym Shift+plus  gaps outer all plus 5
+        bindsym Shift+minus gaps outer all minus 5
+        bindsym Shift+k  gaps outer all plus 5
+        bindsym Shift+j gaps outer all minus 5
+        bindsym Shift+0     gaps outer all set 0
+
+        bindsym Return mode "default"
+        bindsym Escape mode "default"
+}
+
+exec swayidle -w \
+	timeout 300 'swaylock -C ~/.config/swaylock/config' \
+	timeout 600 'swaymsg "output * dpms off"' \
+	timeout 1200 'systemctl suspend-then-hibernate' \
+	resume 'swaymsg "output * dpms on"' \
+	before-sleep 'swaylock -C ~/.config/swaylock/config'
+
+### Input configuration
+#
+# Example configuration:
+
+input "type:touchpad" {
+  accel_profile adaptive
+  pointer_accel 0.1
+  drag enabled
+  drag_lock enabled
+  dwt enabled
+  dwtp enabled
+  tap enabled
+  natural_scroll enabled
+  scroll_method two_finger
+  middle_emulation enabled
+}
+
+# You can get the names of your inputs by running: swaymsg -t get_inputs
+# Read `man 5 sway-input` for more information about this section.
+
+
+# TODO: configure suspend and hibernate
+# Set shut down, restart and locking features
+bindsym $mod+l exec swaylock -C /home/groot/.config/swaylock/config
+set $mode_system [e]xit, [s]uspend, [h]ibernate, [r]eboot, [p]oweroff
+mode "$mode_system" {
+    bindsym s exec systemctl suspend-then-hibernate, mode "default"
+    bindsym e exec swaymsg exit, mode "default"
+    bindsym h exec systemctl hibernate, mode "default"
+    bindsym r exec reboot, mode "default"
+    bindsym p exec shutdown now, mode "default"
+
+    # exit system mode: "Enter" or "Escape"
+    bindsym Return mode "default"
+    bindsym Escape mode "default"
+}
+bindsym $mod+x mode "$mode_system"
+
+
+# Upstream refuses to set XDG_CURRENT_DESKTOP so we have to.
+#exec systemctl --user set-environment XDG_CURRENT_DESKTOP=sway
+exec systemctl --user import-environment DISPLAY SWAYSOCK WAYLAND_DISPLAY XDG_CURRENT_DESKTOP XDG_SESSION_TYPE XDG_SESSION_DESKTOP
+exec hash dbus-update-activation-environment 2>/dev/null && dbus-update-activation-environment --systemd DISPLAY SWAYSOCK XDG_CURRENT_DESKTOP=sway XDG_SESSION_type=wayland  XDG_SESSION_DESKTOP=sway WAYLAND_DISPLAY

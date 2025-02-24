@@ -1,0 +1,458 @@
+# This is an example Hyprland config file.
+# Refer to the wiki for more information.
+# https://wiki.hyprland.org/Configuring/Configuring-Hyprland/
+
+# Please note not all available settings / options are set here.
+# For a full list, see the wiki
+
+# You can split this configuration into multiple files
+# Create your files separately and then link them to this file like this:
+# source = ~/.config/hypr/myColors.conf
+
+
+################
+### MONITORS ###
+################
+
+# See https://wiki.hyprland.org/Configuring/Monitors/
+{{ if eq .chezmoi.hostname "leo" }}
+monitor=,1920x1080@60.0,0x0,1
+{{ else if eq .chezmoi.hostname "leno" }}
+monitor=,highres@highrr,auto,1
+{{ end }}
+
+
+###################
+### MY PROGRAMS ###
+###################
+
+# See https://wiki.hyprland.org/Configuring/Keywords/
+
+# Set programs that you use
+{{ if eq .chezmoi.hostname "leo" }}
+$terminal = alacritty
+$fileManager = thunar
+$menu = fuzzel
+{{ else if eq .chezmoi.hostname "leno" }}
+$terminal = foot tmux
+$fileManager = foot yazi
+$menu = wofi --show drun
+{{ end }}
+$browser = firefox
+
+#################
+### AUTOSTART ###
+#################
+
+# Autostart necessary processes (like notifications daemons, status bars, etc.)
+# Or execute your favorite apps at launch like this:
+
+exec-once = nm-applet
+exec-once = keepassxc
+exec-once = clipse -listen
+{{ if eq .chezmoi.hostname "leno" }}
+exec-once = hyprpaper
+exec-once = hypridle
+exec-once = i3bar-river
+exec-once = systemctl --user start plasma-polkit-agent
+exec-once = dbus-update-activation-environment --systemd --all
+exec-once = systemctl --user import-environment QT_QPA_PLATFORMTHEME
+{{ else if eq .chezmoi.hostname "leo" }}
+exec-once = swaync
+exec-once = /usr/libexec/pipewire-launcher
+exec-once = dbus-update-activation-environment WAYLAND_DISPLAY XDG_CURRENT_DESKTOP=hyprland
+{{end}}
+
+
+#############################
+### ENVIRONMENT VARIABLES ###
+#############################
+
+# See https://wiki.hyprland.org/Configuring/Environment-variables/
+
+{{ if eq .chezmoi.hostname "leno" }}
+env = XCURSOR_SIZE,24
+env = HYPRCURSOR_SIZE,24
+{{ else if eq .chezmoi.hostname "leo" }}
+env = XCURSOR_SIZE,12
+env = HYPRCURSOR_SIZE,12
+{{ end }}
+
+# XDG
+env = XDG_CURRENT_DESKTOP,Hyprland
+env = XDG_SESSION_TYPE,wayland
+env = XDG_SESSION_DESKTOP,Hyprland
+# QT
+env = QT_AUTO_SCREEN_SCALE_FACTOR,1
+env = QT_WAYLAND_DISABLE_WINDOWDECORATION,1
+env = QT_QPA_PLATFORMTHEME,qt5ct
+# Backends
+env = GDK_BACKEND,wayland,x11,*
+env = QT_QPA_PLATFORM,wayland;xcb
+env = SDL_VIDEODRIVER,wayland
+env = CLUTTER_BACKEND,wayland
+
+#####################
+### LOOK AND FEEL ###
+#####################
+
+# Refer to https://wiki.hyprland.org/Configuring/Variables/
+
+# https://wiki.hyprland.org/Configuring/Variables/#general
+general {
+    gaps_in = 0
+    gaps_out = 1
+
+    border_size = 1
+
+    # https://wiki.hyprland.org/Configuring/Variables/#variable-types for info about colors
+    col.active_border = rgba(33ccffee) rgba(00ff99ee) 45deg
+    col.inactive_border = rgba(595959aa)
+
+    # Set to true enable resizing windows by clicking and dragging on borders and gaps
+    resize_on_border = true
+
+    # Please see https://wiki.hyprland.org/Configuring/Tearing/ before you turn this on
+    allow_tearing = false
+
+    layout = dwindle
+}
+
+# https://wiki.hyprland.org/Configuring/Variables/#decoration
+decoration {
+    rounding = 2
+
+    # Change transparency of focused and unfocused windows
+    active_opacity = 1.0
+    inactive_opacity = 0.9
+
+    # https://wiki.hyprland.org/Configuring/Variables/#blur
+    blur {
+        enabled = false
+    }
+}
+
+# https://wiki.hyprland.org/Configuring/Variables/#animations
+animations {
+    enabled = true
+
+    # Default animations, see https://wiki.hyprland.org/Configuring/Animations/ for more
+
+    bezier = myBezier, 0.05, 0.9, 0.1, 1.05
+
+    animation = windows, 1, 7, myBezier
+    animation = windowsOut, 1, 7, default, popin 80%
+    animation = border, 1, 10, default
+    animation = borderangle, 1, 8, default
+    animation = fade, 1, 7, default
+    animation = workspaces, 1, 6, default
+}
+
+# See https://wiki.hyprland.org/Configuring/Dwindle-Layout/ for more
+dwindle {
+    pseudotile = true # Master switch for pseudotiling. Enabling is bound to prim + P in the keybinds section below
+    preserve_split = true # You probably want this
+}
+
+# See https://wiki.hyprland.org/Configuring/Master-Layout/ for more
+master {
+    new_status = master
+}
+
+# https://wiki.hyprland.org/Configuring/Variables/#misc
+misc {
+    vfr = true
+    {{ if eq .chezmoi.hostname "leo" }}
+    force_default_wallpaper = -1 # Set to 0 or 1 to disable the anime mascot wallpapers
+    disable_hyprland_logo = false # If true disables the random hyprland logo / anime girl background. :(
+    disable_hyprland_qtutils_check = true # alpine does not have hyprland qtutils as of now.
+    {{ else }}
+    force_default_wallpaper = 0 # Set to 0 or 1 to disable the anime mascot wallpapers
+    disable_hyprland_logo = true # If true disables the random hyprland logo / anime girl background. :(
+    {{ end }}
+    font_family = FiraCode Nerd Font Mono
+    mouse_move_enables_dpms = true
+    key_press_enables_dpms = true
+}
+
+
+#############
+### INPUT ###
+#############
+
+# https://wiki.hyprland.org/Configuring/Variables/#input
+input {
+    kb_layout = us
+
+    follow_mouse = 1
+
+    sensitivity = 0 # -1.0 - 1.0, 0 means no modification.
+
+    touchpad {
+        natural_scroll = true
+        middle_button_emulation = true
+        
+    }
+    accel_profile = adaptive
+}
+
+# https://wiki.hyprland.org/Configuring/Variables/#gestures
+gestures {
+    workspace_swipe = true
+}
+
+binds {
+    workspace_back_and_forth = true
+    allow_workspace_cycles = true
+}
+
+cursor {
+    inactive_timeout = 5
+}
+
+###################
+### KEYBINDINGS ###
+###################
+
+# See https://wiki.hyprland.org/Configuring/Keywords/
+$prim = SUPER # Sets "Windows" key as main modifier
+$sec = ALT
+
+# Example binds, see https://wiki.hyprland.org/Configuring/Binds/ for more
+bind = $prim, q, killactive,
+bind = $prim, space, togglefloating,
+bind = $prim, d, exec, $menu
+bind = $prim, return, exec, $terminal
+bind = $prim, e, exec, $fileManager
+bind = $prim, b, exec, $browser
+bind = $prim, f, fullscreen
+
+# Move focus with sec + arrow keys or hjkl
+bind = $sec, h, movefocus, l
+bind = $sec, j, movefocus, d
+bind = $sec, k, movefocus, u
+bind = $sec, l, movefocus, r
+
+bind = $sec SHIFT, h, movewindow, l
+bind = $sec SHIFT, j, movewindow, d
+bind = $sec SHIFT, k, movewindow, u
+bind = $sec SHIFT, l, movewindow, r
+
+bind = $sec, Tab, cyclenext
+
+# Switch workspaces with prim + [0-9]
+bind = $prim, 1, workspace, 1
+bind = $prim, 2, workspace, 2
+bind = $prim, 3, workspace, 3
+bind = $prim, 4, workspace, 4
+bind = $prim, 5, workspace, 5
+bind = $prim, 6, workspace, 6
+bind = $prim, 7, workspace, 7
+bind = $prim, 8, workspace, 8
+bind = $prim, 9, workspace, 9
+bind = $prim, 0, workspace, 10
+
+# Move active window to a workspace with prim + SHIFT + [0-9]
+bind = $prim SHIFT, 1, movetoworkspace, 1
+bind = $prim SHIFT, 2, movetoworkspace, 2
+bind = $prim SHIFT, 3, movetoworkspace, 3
+bind = $prim SHIFT, 4, movetoworkspace, 4
+bind = $prim SHIFT, 5, movetoworkspace, 5
+bind = $prim SHIFT, 6, movetoworkspace, 6
+bind = $prim SHIFT, 7, movetoworkspace, 7
+bind = $prim SHIFT, 8, movetoworkspace, 8
+bind = $prim SHIFT, 9, movetoworkspace, 9
+bind = $prim SHIFT, 0, movetoworkspace, 10
+
+# Example special workspace (scratchpad)
+bind = $prim, minus, togglespecialworkspace, magic
+bind = $prim SHIFT, minus, movetoworkspace, special:magic
+
+# Scroll through existing workspaces with prim + scroll
+bind = $prim, mouse_down, workspace, e+1
+bind = $prim, mouse_up, workspace, e-1
+
+# Switch to adjacent workspaces
+bind = $prim, j, workspace, e-1
+bind = $prim, k, workspace, e+1
+
+# Move window to adjacent workspaces
+bind = $prim SHIFT, j, movetoworkspace, e-1
+bind = $prim SHIFT, k, movetoworkspace, e+1
+
+# Cycle through workspaces
+bind = $prim, Tab, workspace, previous
+bind = $prim SHIFT, Tab, movetoworkspace, previous
+
+bind = $prim, r, submap, resize
+submap = resize
+    binde = , h, resizeactive, -10 0
+    binde = , j, resizeactive, 0 10
+    binde = , k, resizeactive, 0 -10
+    binde = , l, resizeactive, 10 0
+
+    bind = , escape, submap, reset
+    bind = , return, submap, reset
+submap = reset
+
+bind = $prim, l, exec, hyprlock
+
+bind = $prim, x, submap, powermenu
+submap = powermenu
+    binde = , e, exit
+    {{ if eq .chezmoi.hostname "leo" }}
+    binde = , r, exec, reboot
+    binde = , p, exec, poweroff
+    binde = , s, exec, zzz -z
+    binde = , h, exec, zzz -Z
+    {{ else }}
+    binde = , r, exec, systemctl reboot
+    binde = , p, exec, systemctl poweroff
+    binde = , s, exec, systemctl suspend
+    binde = , h, exec, systemctl hibernate
+    {{ end }}
+
+    bind = , escape, submap, reset
+    bind = , return, submap, reset
+submap = reset
+
+# Move/resize windows with prim + LMB/RMB and dragging
+bindm = $prim, mouse:272, movewindow
+bindm = $prim, mouse:273, resizewindow
+
+# Laptop multimedia keys for volume and LCD brightness
+bindel = , XF86AudioRaiseVolume, exec, wpctl set-volume -l 2 @DEFAULT_AUDIO_SINK@ 5%+
+bindel = , XF86AudioLowerVolume, exec, wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-
+bindel = , XF86AudioMute, exec, wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle
+bindel = , XF86AudioMicMute, exec, wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle
+bindel = , XF86MonBrightnessUp, exec, brightnessctl s 10%+
+bindel = , XF86MonBrightnessDown, exec, brightnessctl s 10%-
+
+# Requires playerctl
+bindl = , XF86AudioNext, exec, playerctl next
+bindl = , XF86AudioPause, exec, playerctl play-pause
+bindl = , XF86AudioPlay, exec, playerctl play-pause
+bindl = , XF86AudioPrev, exec, playerctl previous
+
+# Manage clipboard with clipse
+{{ if eq .chezmoi.hostname "leno" }}
+bind = SUPER, V, exec, foot -a "clipse" clipse
+{{ else if eq .chezmoi.hostname "leo" }}
+bind = SUPER, V, exec, alacritty --class "clipse" -e clipse
+{{ end }}
+
+# Screenshot
+bind = , Print, exec, flameshot gui
+bind = $prim, o, exec, wlr-ocr
+bind = $prim SHIFT, q, exec, wlr-qr
+
+##############################
+### WINDOWS AND WORKSPACES ###
+##############################
+
+# See https://wiki.hyprland.org/Configuring/Window-Rules/ for more
+# See https://wiki.hyprland.org/Configuring/Workspace-Rules/ for workspace rules
+
+# Example windowrule v1
+# windowrule = float, ^(kitty)$
+
+# Example windowrule v2
+# windowrulev2 = float,class:^(kitty)$,title:^(kitty)$
+
+windowrule = noblur,.*
+windowrule = float, ^(blueberry.py)$
+windowrule = float, ^(steam)$
+windowrule = float, ^(guifetch)$ # FlafyDev/guifetch
+windowrule = float, title:^(Open File)(.*)$
+windowrule = float, title:^(Select a File)(.*)$
+windowrule = float, title:^(Choose wallpaper)(.*)$
+windowrule = float, title:^(Open Folder)(.*)$
+windowrule = float, title:^(Save As)(.*)$
+windowrule = float, title:^(Library)(.*)$
+windowrule = float, title:^(File Upload)(.*)$
+windowrule = center, title:^(Open File)(.*)$
+windowrule = center, title:^(Select a File)(.*)$
+windowrule = center, title:^(Choose wallpaper)(.*)$
+windowrule = center, title:^(Open Folder)(.*)$
+windowrule = center, title:^(Save As)(.*)$
+windowrule = center, title:^(Library)(.*)$
+windowrule = center, title:^(File Upload)(.*)$
+
+windowrulev2 = suppressevent maximize, class:.* # You'll probably like this.
+windowrulev2 = idleinhibit fullscreen, class:.*
+windowrulev2 = size 622 652, class:(clipse)
+windowrulev2 = float,class:(clipse)
+windowrulev2 = float,title:^(About Mozilla Firefox)$
+windowrulev2 = float,class:^(firefox)$,title:^(Picture-in-Picture)$
+windowrulev2 = float,class:^(firefox)$,title:^(Library)$
+windowrulev2 = float,class:^(alacritty)$,title:^(btm)$
+windowrulev2 = float,class:^(vlc)$
+windowrulev2 = float,class:^(kvantummanager)$
+windowrulev2 = float,class:^(qt5ct)$
+windowrulev2 = float,class:^(qt6ct)$
+windowrulev2 = float,class:^(nwg-look)$
+windowrulev2 = float,class:^(org.kde.ark)$
+windowrulev2 = float,class:^(org.pulseaudio.pavucontrol)$
+windowrulev2 = float,class:^(blueman-manager)$
+windowrulev2 = float,class:^(nm-applet)$
+windowrulev2 = float,class:^(nm-connection-editor)$
+windowrulev2 = float,class:^(org.kde.polkit-kde-authentication-agent-1)$
+windowrulev2 = float,class:^(Signal)$ # Signal-Gtk
+windowrulev2 = float,class:^(com.github.rafostar.Clapper)$ # Clapper-Gtk
+windowrulev2 = float,class:^(app.drey.Warp)$ # Warp-Gtk
+windowrulev2 = float,class:^(net.davidotek.pupgui2)$ # ProtonUp-Qt
+windowrulev2 = float,class:^(yad)$ # Protontricks-Gtk
+windowrulev2 = float,class:^(eog)$ # Imageviewer-Gtk
+windowrulev2 = float,class:^(io.github.alainm23.planify)$ # planify-Gtk
+windowrulev2 = float,class:^(io.gitlab.theevilskeleton.Upscaler)$ # Upscaler-Gtk
+windowrulev2 = float,class:^(com.github.unrud.VideoDownloader)$ # VideoDownloader-Gkk
+windowrulev2 = float,class:^(io.gitlab.adhami3310.Impression)$ # Impression-Gtk
+windowrulev2 = float,class:^(io.missioncenter.MissionCenter)$ # MissionCenter-Gtk
+windowrulev2 = float,title:^([Pp]icture[-\s]?[Ii]n[-\s]?[Pp]icture)(.*)$
+windowrulev2 = tile, class:(dev.warp.Warp)
+
+windowrule=immediate,.*\.exe
+windowrulev2=immediate,class:(steam_app)
+
+layerrule = blur,wofi
+layerrule = ignorezero,wofi
+layerrule = blur,logout_dialog
+layerrule = xray 1, .*
+layerrule = noanim, .*
+layerrule = noanim, walker
+layerrule = noanim, selection
+layerrule = noanim, overview
+layerrule = noanim, anyrun
+layerrule = noanim, indicator.*
+layerrule = noanim, osk
+layerrule = noanim, hyprpicker
+layerrule = blur, shell:*
+layerrule = ignorealpha 0.6, shell:*
+layerrule = noanim, noanim
+layerrule = blur, gtk-layer-shell
+layerrule = ignorezero, gtk-layer-shell
+layerrule = blur, launcher
+layerrule = ignorealpha 0.5, launcher
+layerrule = animation slide top, sideleft.*
+layerrule = animation slide top, sideright.*
+layerrule = blur, session
+layerrule = blur, bar
+layerrule = ignorealpha 0.6, bar
+layerrule = blur, corner.*
+layerrule = ignorealpha 0.6, corner.*
+layerrule = blur, dock
+layerrule = ignorealpha 0.6, dock
+layerrule = blur, indicator.*
+layerrule = ignorealpha 0.6, indicator.*
+layerrule = blur, overview
+layerrule = ignorealpha 0.6, overview
+layerrule = blur, cheatsheet
+layerrule = ignorealpha 0.6, cheatsheet
+layerrule = blur, sideright
+layerrule = ignorealpha 0.6, sideright
+layerrule = blur, sideleft
+layerrule = ignorealpha 0.6, sideleft
+layerrule = blur, indicator*
+layerrule = ignorealpha 0.6, indicator*
+layerrule = blur, osk
+layerrule = ignorealpha 0.6, osk

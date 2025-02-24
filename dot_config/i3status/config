@@ -1,0 +1,75 @@
+# i3status configuration file.
+# see "man i3status" for documentation.
+
+# It is important that this file is edited as UTF-8.
+# The following line should contain a sharp s:
+# ß
+# If the above line is not correctly displayed, fix your editor first!
+
+general {
+        colors = true
+        interval = 1
+        output_format = "i3bar"
+        separator = "|"
+}
+
+order += "ipv6"
+order += "path_exists VPN"
+order += "wireless _first_"
+order += "ethernet _first_"
+order += "cpu_usage"
+order += "load"
+order += "cpu_temperature 0"
+#order += "disk /"
+order += "memory"
+#order += "tztime local"
+
+ipv6 {
+    format_down = ""
+}
+
+path_exists VPN {
+    # path exists when a VPN tunnel launched by nmcli/nm-applet is active
+    path = "/proc/sys/net/ipv4/conf/tun0"
+    format_down = ""
+}
+
+
+wireless _first_ {
+        format_up = " %quality %essid:%ip"
+        format_down = ""
+}
+
+ethernet _first_ {
+        format_up = "%speed %ip"
+        format_down = ""
+}
+
+cpu_usage {
+    format = " %usage"
+}
+
+cpu_temperature 0 {
+    format = "%degrees°C"
+    max_threshold= 56
+}
+
+load {
+        format = "%1min"
+}
+
+#disk "/" {
+#    prefix_type = "custom"
+#    format = "%used/%total"
+#    format_not_mounted = ""
+#    low_threshold= 10
+#}
+
+memory {
+        format = "%used/%total"
+        threshold_degraded= "2G"
+}
+
+#tztime local {
+#        format = "%A %B %e %Y %I:%M:%S %p"
+#}
